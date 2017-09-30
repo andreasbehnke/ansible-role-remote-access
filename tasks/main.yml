@@ -1,2 +1,11 @@
 ---
 
+  - name: place public ssh keys
+    authorized_key: user="{{ remote_access.user }}" key="{{ lookup('file', '{{ remote_access.authorized_keys_prefix }}/{{ item }}.pub') }}"
+    with_items: {{ remote_access.authorized_users }}
+
+  - name: disable ssh password login
+    become: yes
+    lineinfile: dest={{ remote_access.ssh_daemon_config }} line="PasswordAuthentication no"
+    notify:
+      - restart ssh daemon

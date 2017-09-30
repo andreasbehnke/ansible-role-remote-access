@@ -1,2 +1,5 @@
 ---
 
+  - name: restart ssh daemon
+    become: yes
+    service: name={{ remote_access.ssh_daemon_name }} state=restarted

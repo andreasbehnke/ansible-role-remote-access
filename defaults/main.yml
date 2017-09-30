@@ -1,2 +1,14 @@
 ---
 
+  remote_access:
+      # the user at remote system, whose authorized keys should be modified
+      user: "{{ ansible_user_id }}"
+      # path at ansible host which contains users public keys
+      authorized_keys_prefix: "/etc/ansible/authorized-keys"
+      # users which should be authorized key. For each user a public key file
+      # must exists in authorized_keys_prefix,
+      # i.e. /etc/ansible/authorized-keys/ChuckNorris.pub
+      authorized_users:
+        - ChuckNorris
+      ssh_daemon_name: "sshd"
+      ssh_daemon_config: "/etc/ssh/sshd_config"
