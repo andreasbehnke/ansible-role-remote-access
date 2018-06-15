@@ -9,6 +9,6 @@
       # must exists in authorized_keys_prefix,
       # i.e. /etc/ansible/authorized-keys/ChuckNorris.pub
       authorized_users:
-        - ChuckNorris
+      #  - ChuckNorris
       ssh_daemon_name: "sshd"
       ssh_daemon_config: "/etc/ssh/sshd_config"
