@@ -1,4 +1,16 @@
 ---
+  - name: install sudo
+    become: yes
+    apt: name=sudo state=latest
+
+  - name: create remote access user
+    become: yes
+    user:
+      name: "{{ remote_access_user }}"
+      password: "{{ remote_access_user_password | password_hash('sha512') }}"
+      groups: sudo
+      append: yes
+    when: remote_access_user_password is defined
 
   - name: place public ssh keys
     authorized_key: user="{{ remote_access_user }}" key="{{ lookup('file', '{{ remote_access_authorized_keys_prefix }}/{{ item }}.pub') }}"
@@ -6,6 +18,10 @@
 
   - name: disable ssh password login
     become: yes
-    lineinfile: dest={{ remote_access_ssh_daemon_config }} line="PasswordAuthentication no"
+    lineinfile: dest="{{ remote_access_ssh_daemon_config }}" regexp="{{ item.key }}" line="{{ item.key }} {{ item.value }}"
     notify:
       - restart ssh daemon
+    with_items:
+      - { key: "PubkeyAuthentication",   value: "yes" }
+      - { key: "PasswordAuthentication", value: "no" }
+      - { key: "PermitRootLogin",        value: "no" }
