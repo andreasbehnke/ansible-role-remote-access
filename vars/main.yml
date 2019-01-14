@@ -1,0 +1,8 @@
+---
+
+  remote_access_sshd_configuration:
+    # only public key authentication allowed
+    - { key: "PubkeyAuthentication",   value: "yes" }
+    - { key: "PasswordAuthentication", value: "no" }
+    # no root login allowed
+    - { key: "PermitRootLogin",        value: "no" }
