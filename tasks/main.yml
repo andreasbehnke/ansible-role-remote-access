@@ -10,6 +10,7 @@
       password: "{{ remote_access_user_password | password_hash('sha512') }}"
       groups: sudo
       append: yes
+      shell: "/bin/bash"
     when: remote_access_user_password is defined
 
   - name: place public ssh keys
