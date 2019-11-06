@@ -14,12 +14,12 @@
     when: remote_access_user_password is defined
 
   - name: collect public keys of authorized users
-    become: yes
     set_fact:
       remote_access_authorized_keys: "{{remote_access_authorized_keys}}{{ lookup('file', '{{ remote_access_authorized_keys_prefix }}/{{ item }}.pub') }}\n"
     with_items: "{{ remote_access_authorized_users }}"
 
   - name: place public ssh keys
+    become: yes
     authorized_key: 
       user: "{{ remote_access_user }}"
       key: "{{ remote_access_authorized_keys }}"
