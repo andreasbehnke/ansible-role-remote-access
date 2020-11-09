@@ -6,5 +6,3 @@
     - { key: "PasswordAuthentication", value: "no" }
     # no root login allowed
     - { key: "PermitRootLogin",        value: "no" }
-  
-  remote_access_authorized_keys: ""

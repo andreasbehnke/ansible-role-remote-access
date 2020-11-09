@@ -1,0 +1,17 @@
+---
+
+  - name: collect public keys of authorized users - initialize authorized_keys
+    set_fact:
+      authorized_keys: ""
+
+  - name: collect public keys of authorized users
+    set_fact:
+      authorized_keys: "{{ authorized_keys }}{{ lookup('file', '{{ keys_prefix }}/{{ item }}.pub') }}\n"
+    with_items: "{{ authorized_users }}"
+
+  - name: place public ssh keys
+    become: yes
+    authorized_key: 
+      user: "{{ user }}"
+      key: "{{ authorized_keys }}"
+      exclusive: yes

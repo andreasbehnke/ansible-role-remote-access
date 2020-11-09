@@ -18,17 +18,12 @@
       password: "{{ remote_access_user_password | password_hash('sha512') }}"
     when: remote_access_user_password is defined
 
-  - name: collect public keys of authorized users
-    set_fact:
-      remote_access_authorized_keys: "{{remote_access_authorized_keys}}{{ lookup('file', '{{ remote_access_authorized_keys_prefix }}/{{ item }}.pub') }}\n"
-    with_items: "{{ remote_access_authorized_users }}"
-
-  - name: place public ssh keys
-    become: yes
-    authorized_key: 
-      user: "{{ remote_access_user }}"
-      key: "{{ remote_access_authorized_keys }}"
-      exclusive: yes
+  - name: set authorized keys
+    include_tasks: authorized_keys.yml
+    vars:
+      - keys_prefix: "{{ remote_access_authorized_keys_prefix }}"
+      - authorized_users: "{{ remote_access_authorized_users }}"
+      - user: "{{ remote_access_user }}"
 
   - name: sshd configuration - clear old configuration lines
     become: yes
